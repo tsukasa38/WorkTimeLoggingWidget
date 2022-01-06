@@ -17,11 +17,11 @@ app.on('ready', () => {
 
     //mainWindow.webContents.openDevTools();
 
-    powerMonitor.on('resume', () => {
-        mainWindow.webContents.send('powerMonitor', { 'type': 'resume' });
+    powerMonitor.on('unlock-screen', () => {
+        mainWindow.webContents.send('powerMonitor', { type: 'resume' });
     });
 
-    powerMonitor.on('suspend', () => {
-        mainWindow.webContents.send('powerMonitor', { 'type': 'suspend' });
+    powerMonitor.on('lock-screen', () => {
+        mainWindow.webContents.send('powerMonitor', { type: 'suspend' });
     });
 });
