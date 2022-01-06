@@ -2,17 +2,22 @@
     import { onMount } from "svelte";
     import StopwatchCore from "./StopwatchCore.svelte";
 
-    let msec: number = 0;
+    let time_sec: number = 0;
+    let time_msec: number = 0;
     let power_on: boolean = false;
+    let display: string = '00:00:00';
 
-    $: display = format(msec);
+    $: time_sec = toSec(time_msec);
+    $: display = format(time_sec);
 
-    function format(msec: number): string {
-        const total_seconds: number = Math.floor(msec/1000);
+    function toSec(msec: number): number {
+        return Math.floor(msec/1000);
+    }
 
-        const hour: number = Math.floor(total_seconds / 3600);
-        const minute: number = Math.floor((total_seconds % 3600) / 60);
-        const second: number = total_seconds % 60;
+    function format(time_sec: number): string {
+        const hour: number = Math.floor(time_sec / 3600);
+        const minute: number = Math.floor((time_sec % 3600) / 60);
+        const second: number = time_sec % 60;
 
         const h: string = `0${hour}`.slice(-2);
         const m: string = `0${minute}`.slice(-2);
@@ -30,7 +35,7 @@
     }
 
     function reset(): void {
-        msec = 0;
+        time_msec = 0;
     }
 
     onMount(() => {
@@ -46,7 +51,7 @@
 
 </script>
 
-<StopwatchCore bind:elapsed_time={msec} bind:power_on={power_on}>
+<StopwatchCore bind:elapsed_time={time_msec} bind:power_on={power_on}>
     <div class="container">
         <p class="time">{display}</p>
     </div>
