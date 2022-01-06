@@ -35,11 +35,12 @@
 
     onMount(() => {
         start();
+
         window.api.on('powerMonitor', (arg) => {
             const type: string = arg.type;
 
-            if(type === 'resume') { msec = 0; }
-            if(type === 'suspend') { msec = 0; }
+            if(type === 'resume') { start(); }
+            if(type === 'suspend') { stop(); reset(); }
         });
     });
 
