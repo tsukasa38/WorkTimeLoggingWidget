@@ -1,13 +1,12 @@
+import css from 'rollup-plugin-css-only';
 import svelte from 'rollup-plugin-svelte';
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
-import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import commonjs from '@rollup/plugin-commonjs';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
-import css from 'rollup-plugin-css-only';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
-const production = !process.env.ROLLUP_WATCH;
+const production = (process.env.NODE_ENV === 'production' ? true : false);
 
 function serve() {
 	let server;
@@ -19,7 +18,7 @@ function serve() {
 	return {
 		writeBundle() {
 			if (server) return;
-			server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+			server = require('child_process').spawn('npm', ['run', 'preview'], {
 				stdio: ['ignore', 'inherit', 'inherit'],
 				shell: true
 			});
@@ -30,54 +29,69 @@ function serve() {
 	};
 }
 
-export default {
-	input: 'src/main.ts',
-	output: {
-		sourcemap: true,
-		format: 'iife',
-		name: 'app',
-		file: 'public/build/bundle.js'
-	},
-	plugins: [
-		svelte({
-			preprocess: sveltePreprocess({ sourceMap: !production }),
-			compilerOptions: {
-				// enable run-time checks when not in production
-				dev: !production
-			}
-		}),
-		// we'll extract any component CSS out into
-		// a separate file - better for performance
-		css({ output: 'bundle.css' }),
-
-		// If you have external dependencies installed from
-		// npm, you'll most likely need these plugins. In
-		// some cases you'll need additional configuration -
-		// consult the documentation for details:
-		// https://github.com/rollup/plugins/tree/master/packages/commonjs
-		resolve({
-			browser: true,
-			dedupe: ['svelte']
-		}),
-		commonjs(),
-		typescript({
-			sourceMap: production,
-			inlineSources: !production
-		}),
-
-		// In dev mode, call `npm run start` once
-		// the bundle has been generated
-		!production && serve(),
-
-		// Watch the `public` directory and refresh the
-		// browser on changes when not in production
-		!production && livereload('public'),
-
-		// If we're building for production (npm run build
-		// instead of npm run dev), minify
-		production && terser()
-	],
-	watch: {
-		clearScreen: false
-	}
-};
+export default [
+    {
+        input: 'src/main-process/main.mts',
+        output: [
+            {
+                format: 'cjs',
+                sourcemap: !production,
+                file: 'public/main.cjs',
+            }
+        ],
+        plugins: [
+            commonjs(),
+            typescript(),
+            typescript({
+                sourceMap: !production
+            }),
+            production && terser(),
+        ]
+    },
+    {
+        input: 'src/context-bridge/main.mts',
+        output: [
+            {
+                format: 'cjs',
+                sourcemap: !production,
+                file: 'public/preload.cjs',
+            }
+        ],
+        plugins: [
+            commonjs(),
+            typescript(),
+            typescript({
+                sourceMap: !production
+            }),
+            production && terser(),
+        ]
+    },
+    {
+        input: 'src/main-window/main.mts',
+        output: [
+            {
+                format: 'esm',
+                sourcemap: !production,
+                file: 'public/build/bundle.mjs',
+            }
+        ],
+        plugins: [
+            svelte({
+                preprocess: sveltePreprocess({ sourceMap: !production }),
+                compilerOptions: { dev: !production }
+            }),
+            nodeResolve({
+                browser: true,
+                dedupe: ['svelte']
+            }),
+            typescript({
+                sourceMap: !production,
+            }),
+            css({
+                output: 'bundle.css'
+            }),
+            !production && serve(),
+            production && terser()
+        ]
+    }
+]

@@ -1,5 +1,7 @@
-const path = require('path');
-const { app, BrowserWindow, powerMonitor, dialog } = require('electron');
+import path from 'path';
+import { app, BrowserWindow, powerMonitor, dialog } from 'electron';
+
+const development = (process.env.NODE_ENV === 'development' ? true : false);
 
 const isMultipleLaunch = !app.requestSingleInstanceLock();
 if(isMultipleLaunch) {
@@ -21,9 +23,9 @@ app.on('ready', () => {
         webPreferences: { preload: path.join(__dirname, 'preload.cjs') }
     });
 
-    mainWindow.loadFile(path.join(__dirname, 'public/index.html'));
+    mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
-    //mainWindow.webContents.openDevTools();
+    if(development) { mainWindow.webContents.openDevTools(); }
 
     powerMonitor.on('unlock-screen', () => {
         mainWindow.webContents.send('powerMonitor', { type: 'resume' });
