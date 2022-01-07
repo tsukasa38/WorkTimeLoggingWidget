@@ -1,5 +1,13 @@
 const path = require('path');
-const { app, BrowserWindow, powerMonitor } = require('electron');
+const { app, BrowserWindow, powerMonitor, dialog } = require('electron');
+
+const isMultipleLaunch = !app.requestSingleInstanceLock();
+if(isMultipleLaunch) {
+    const title = 'Multiple Launch Error';
+    const content = 'The application is already running.';
+    dialog.showErrorBox(title, content);
+    app.quit();
+}
 
 app.on('ready', () => {
     const mainWindow = new BrowserWindow({
