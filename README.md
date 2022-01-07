@@ -10,3 +10,7 @@
   - Front-End UI Framework
 - [Electron](https://www.electronjs.org/)
   - Build Cross-Platform Desktop Apps with WEB Technologies
+- [Rollup.js](https://rollupjs.org/)
+  - A module bundler for JavaScript
+- [TypeScript](https://www.typescriptlang.org/)
+  - A strongly typed programming language based on JavaScript
