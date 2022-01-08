@@ -1,9 +1,8 @@
 import css from 'rollup-plugin-css-only';
 import svelte from 'rollup-plugin-svelte';
-import { terser } from 'rollup-plugin-terser';
+import esbuild from 'rollup-plugin-esbuild'
 import commonjs from '@rollup/plugin-commonjs';
 import sveltePreprocess from 'svelte-preprocess';
-import typescript from '@rollup/plugin-typescript';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 const production = (process.env.NODE_ENV === 'production' ? true : false);
@@ -40,13 +39,16 @@ export default [
             }
         ],
         plugins: [
+            nodeResolve(),
             commonjs(),
-            typescript(),
-            typescript({
-                sourceMap: !production
-            }),
-            production && terser(),
-        ]
+            esbuild({
+                target: 'esnext',
+                minify: production,
+                sourceMap: !production,
+                include: 'src/main-process/**/*',
+            })
+        ],
+        external: ['electron']
     },
     {
         input: 'src/context-bridge/main.mts',
@@ -58,13 +60,16 @@ export default [
             }
         ],
         plugins: [
+            nodeResolve(),
             commonjs(),
-            typescript(),
-            typescript({
-                sourceMap: !production
-            }),
-            production && terser(),
-        ]
+            esbuild({
+                target: 'esnext',
+                minify: production,
+                sourceMap: !production,
+                include: 'src/context-bridge/**/*',
+            })
+        ],
+        external: ['electron']
     },
     {
         input: 'src/main-window/main.mts',
@@ -84,14 +89,16 @@ export default [
                 browser: true,
                 dedupe: ['svelte']
             }),
-            typescript({
+            esbuild({
+                target: 'esnext',
+                minify: production,
                 sourceMap: !production,
+                include: 'src/main-window/**/*',
             }),
             css({
                 output: 'bundle.css'
             }),
-            !production && serve(),
-            production && terser()
+            !production && serve()
         ]
     }
 ]
