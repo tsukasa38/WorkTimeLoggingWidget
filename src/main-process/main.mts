@@ -44,4 +44,9 @@ app.on('ready', () => {
     powerMonitor.on('lock-screen', () => {
         mainWindow.webContents.send('powerMonitor', { type: 'suspend' });
     });
+
+    mainWindow.on('close', () => {
+        const [ x, y ] = mainWindow.getPosition();
+        Settings.setPosition(x, y);
+    });
 });
