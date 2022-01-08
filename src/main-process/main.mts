@@ -1,4 +1,5 @@
 import path from 'path';
+import Settings from './lib/settings';
 import { app, BrowserWindow, powerMonitor, dialog } from 'electron';
 
 const development = (process.env.NODE_ENV === 'development' ? true : false);
@@ -11,16 +12,25 @@ if(isMultipleLaunch) {
     app.quit();
 }
 
+const settings = Settings.getSettings();
+const x = settings.position.x;
+const y = settings.position.y;
+const movable = settings.movable;
+const alwaysOnTop = settings.alwaysOnTop;
+
 app.on('ready', () => {
     const mainWindow = new BrowserWindow({
+        x,
+        y,
+        movable,
+        alwaysOnTop,
         width: 300,
         height: 200,
         frame: false,
         resizable: false,
         transparent: true,
         skipTaskbar: true,
-        alwaysOnTop: false,
-        webPreferences: { preload: path.join(__dirname, 'preload.cjs') }
+        webPreferences: { preload: path.join(__dirname, 'preload.cjs') },
     });
 
     mainWindow.loadFile(path.join(__dirname, 'index.html'));

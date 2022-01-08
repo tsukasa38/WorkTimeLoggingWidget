@@ -48,7 +48,7 @@ export default [
                 include: 'src/main-process/**/*',
             })
         ],
-        external: ['electron']
+        external: ['electron', 'electron-store']
     },
     {
         input: 'src/context-bridge/main.mts',
