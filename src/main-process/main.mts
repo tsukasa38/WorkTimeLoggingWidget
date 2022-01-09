@@ -1,4 +1,5 @@
 import path from 'path';
+import Log from './lib/log';
 import Settings from './lib/settings';
 import { app, BrowserWindow, powerMonitor, dialog } from 'electron';
 
@@ -37,12 +38,20 @@ app.on('ready', () => {
 
     if(development) { mainWindow.webContents.openDevTools(); }
 
+    Log.insertLog('resume', Date.now());
+
     powerMonitor.on('unlock-screen', () => {
-        mainWindow.webContents.send('powerMonitor', { type: 'resume' });
+        const type = 'unlock';
+        const timestamp = Date.now();
+        Log.insertLog(type, timestamp);
+        mainWindow.webContents.send('powerMonitor', { type });
     });
 
     powerMonitor.on('lock-screen', () => {
-        mainWindow.webContents.send('powerMonitor', { type: 'suspend' });
+        const type = 'lock';
+        const timestamp = Date.now();
+        Log.insertLog(type, timestamp);
+        mainWindow.webContents.send('powerMonitor', { type });
     });
 
     mainWindow.on('close', () => {

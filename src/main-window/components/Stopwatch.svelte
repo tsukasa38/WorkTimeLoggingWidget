@@ -44,8 +44,8 @@
         window.api.on('powerMonitor', (arg) => {
             const type: string = arg.type;
 
-            if(type === 'resume') { start(); }
-            if(type === 'suspend') { stop(); reset(); }
+            if(type === 'unlock') { start(); }
+            if(type === 'lock') { stop(); reset(); }
         });
     });
 
