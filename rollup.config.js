@@ -1,6 +1,6 @@
 import css from 'rollup-plugin-css-only';
 import svelte from 'rollup-plugin-svelte';
-import esbuild from 'rollup-plugin-esbuild'
+import esbuild from 'rollup-plugin-esbuild';
 import commonjs from '@rollup/plugin-commonjs';
 import sveltePreprocess from 'svelte-preprocess';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
@@ -30,7 +30,7 @@ function serve() {
 
 export default [
     {
-        input: 'src/main-process/main.mts',
+        input: 'src/main-process/main.ts',
         output: [
             {
                 format: 'cjs',
@@ -51,7 +51,7 @@ export default [
         external: ['electron', 'electron-store']
     },
     {
-        input: 'src/context-bridge/main.mts',
+        input: 'src/context-bridge/main.ts',
         output: [
             {
                 format: 'cjs',
@@ -72,7 +72,7 @@ export default [
         external: ['electron']
     },
     {
-        input: 'src/main-window/main.mts',
+        input: 'src/main-window/main.ts',
         output: [
             {
                 format: 'esm',

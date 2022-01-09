@@ -1,6 +1,6 @@
 {
   "name": "work-time-logging-widget",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "main": "public/main.cjs",
   "private": true,
   "scripts": {
@@ -16,6 +16,7 @@
     "@tsconfig/svelte": "^3.0.0",
     "electron": "^16.0.6",
     "electron-builder": "^22.14.5",
+    "esbuild": "^0.14.11",
     "rollup": "^2.63.0",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-esbuild": "^4.8.2",
