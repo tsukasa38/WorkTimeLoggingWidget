@@ -1,5 +1,8 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('api', {
-    on: (channel, func) => { ipcRenderer.on(channel, (event, ...args) => func(...args)); },
-});
+const api: API = {
+    // main -> renderer
+    powerMonitor: (listener) => { ipcRenderer.on('powerMonitor', (_event, data: PowerMonitorData) => listener(data)); },
+};
+
+contextBridge.exposeInMainWorld('api', api);

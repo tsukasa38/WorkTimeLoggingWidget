@@ -44,14 +44,18 @@ app.on('ready', () => {
         const type = 'unlock';
         const timestamp = Date.now();
         Log.insertLog(type, timestamp);
-        mainWindow.webContents.send('powerMonitor', { type });
+
+        const data: PowerMonitorData = { type };
+        mainWindow.webContents.send('powerMonitor', data);
     });
 
     powerMonitor.on('lock-screen', () => {
         const type = 'lock';
         const timestamp = Date.now();
         Log.insertLog(type, timestamp);
-        mainWindow.webContents.send('powerMonitor', { type });
+
+        const data: PowerMonitorData = { type };
+        mainWindow.webContents.send('powerMonitor', data);
     });
 
     mainWindow.on('close', () => {
