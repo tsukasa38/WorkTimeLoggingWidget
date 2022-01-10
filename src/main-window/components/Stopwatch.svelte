@@ -41,9 +41,8 @@
     onMount(() => {
         start();
 
-        window.api.on('powerMonitor', (arg) => {
-            const type: string = arg.type;
-
+        window.api.powerMonitor((data: PowerMonitorData) => {
+            const type: string = data.type;
             if(type === 'unlock') { start(); }
             if(type === 'lock') { stop(); reset(); }
         });
