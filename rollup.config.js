@@ -1,3 +1,4 @@
+import copy from 'rollup-plugin-copy';
 import css from 'rollup-plugin-css-only';
 import svelte from 'rollup-plugin-svelte';
 import esbuild from 'rollup-plugin-esbuild';
@@ -94,6 +95,12 @@ export default [
                 minify: production,
                 sourceMap: !production,
                 include: 'src/main-window/**/*',
+            }),
+            copy({
+                targets: [
+                    { src: 'src/main-window/index.html', dest: 'public' },
+                    { src: 'src/main-window/global.css', dest: 'public' },
+                ]
             }),
             css({
                 output: 'bundle.css'

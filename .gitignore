@@ -2,8 +2,4 @@
 /public/build/
 .DS_Store
 /dist/
-
-/public/main.cjs
-/public/main.cjs.map
-/public/preload.cjs
-/public/preload.cjs.map
+/public/
