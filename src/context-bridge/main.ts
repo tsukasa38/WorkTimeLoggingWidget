@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 const api: API = {
     // main -> renderer
-    powerMonitor: (listener) => { ipcRenderer.on('powerMonitor', (_event, data: PowerMonitorData) => listener(data)); },
+    time: (listener) => { ipcRenderer.on('time', (_event, second: number) => listener(second)); },
 };
 
 contextBridge.exposeInMainWorld('api', api);

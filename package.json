@@ -1,6 +1,6 @@
 {
   "name": "work-time-logging-widget",
-  "version": "2.4.2",
+  "version": "3.0.0",
   "main": "public/main.cjs",
   "private": true,
   "scripts": {

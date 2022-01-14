@@ -2,10 +2,8 @@ interface Window {
     api: API;
 }
 
-type PowerMonitorData = {
-    type: string;
-}
+type powerMonitorType = 'idle';
 
 type API = {
-    powerMonitor: (listener: (data: PowerMonitorData) => void) => void;
+    time: (listener: (second: number) => void) => void;
 }

@@ -1,6 +1,6 @@
 export type Log = {
     log: {
-        type: string;
+        type: powerMonitorType;
         timestamp: number;
     }[];
 }

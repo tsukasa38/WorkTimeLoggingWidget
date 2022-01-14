@@ -20,7 +20,7 @@ class Store {
 
         return this.#db.data ?? defaults;
     }
-    insertLog(type: string, timestamp: number): boolean {
+    insertLog(type: powerMonitorType, timestamp: number): boolean {
         try {
             this.#db.read();
             this.#db.data ??= defaults;
