@@ -1,6 +1,7 @@
 import path from 'path';
 import Log from './lib/log';
 import Settings from './lib/settings';
+import Stopwatch from './lib/stopwatch';
 import { app, BrowserWindow, powerMonitor, dialog } from 'electron';
 
 const development = (process.env.NODE_ENV === 'development' ? true : false);
@@ -27,6 +28,7 @@ app.on('ready', () => {
         alwaysOnTop,
         width: 300,
         height: 200,
+        show: false,
         frame: false,
         resizable: false,
         transparent: true,
@@ -38,24 +40,23 @@ app.on('ready', () => {
 
     if(development) { mainWindow.webContents.openDevTools(); }
 
-    Log.insertLog('resume', Date.now());
+    const stopwatch = new Stopwatch(async (second: number) => {
+        if(second % 60 === 0) { Log.insertLog('idle', Date.now()); }
+        mainWindow.webContents.send('time', second);
+    });
 
     powerMonitor.on('unlock-screen', () => {
-        const type = 'unlock';
-        const timestamp = Date.now();
-        Log.insertLog(type, timestamp);
-
-        const data: PowerMonitorData = { type };
-        mainWindow.webContents.send('powerMonitor', data);
+        stopwatch.start();
     });
 
     powerMonitor.on('lock-screen', () => {
-        const type = 'lock';
-        const timestamp = Date.now();
-        Log.insertLog(type, timestamp);
+        stopwatch.stop();
+        stopwatch.reset();
+    });
 
-        const data: PowerMonitorData = { type };
-        mainWindow.webContents.send('powerMonitor', data);
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+        stopwatch.start();
     });
 
     mainWindow.on('close', () => {

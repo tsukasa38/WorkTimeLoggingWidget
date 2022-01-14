@@ -1,18 +1,10 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import StopwatchCore from "./StopwatchCore.svelte";
 
     let time_sec: number = 0;
-    let time_msec: number = 0;
-    let power_on: boolean = false;
     let display: string = '00:00:00';
 
-    $: time_sec = toSec(time_msec);
     $: display = format(time_sec);
-
-    function toSec(msec: number): number {
-        return Math.floor(msec/1000);
-    }
 
     function format(time_sec: number): string {
         const hour: number = Math.floor(time_sec / 3600);
@@ -26,35 +18,15 @@
         return `${h}:${m}:${s}`;
     }
 
-    function start(): void {
-        power_on = true;
-    }
-
-    function stop(): void {
-        power_on = false;
-    }
-
-    function reset(): void {
-        time_msec = 0;
-    }
-
     onMount(() => {
-        start();
-
-        window.api.powerMonitor((data: PowerMonitorData) => {
-            const type: string = data.type;
-            if(type === 'unlock') { start(); }
-            if(type === 'lock') { stop(); reset(); }
-        });
+        window.api.time((second: number) => time_sec = second);
     });
 
 </script>
 
-<StopwatchCore bind:elapsed_time={time_msec} bind:power_on={power_on}>
-    <div class="container">
-        <p class="time">{display}</p>
-    </div>
-</StopwatchCore>
+<div class="container">
+    <p class="time">{display}</p>
+</div>
 
 <style>
     .container {
