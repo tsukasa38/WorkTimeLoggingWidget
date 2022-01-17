@@ -100,6 +100,7 @@ export default [
                 targets: [
                     { src: 'src/main-window/index.html', dest: 'public' },
                     { src: 'src/main-window/global.css', dest: 'public' },
+                    { src: 'icon.png', dest: 'public' },
                 ]
             }),
             css({

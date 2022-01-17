@@ -1,0 +1,14 @@
+productName: "Work Time Logging Widget"
+icon: "icon.png"
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+
+nsis:
+  oneClick: true
+  createDesktopShortcut: true
+  allowToChangeInstallationDirectory: false
+  artifactName: "${productName}_setup_${version}.${ext}"
