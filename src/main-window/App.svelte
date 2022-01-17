@@ -1,9 +1,11 @@
 <script lang="ts">
 	import StopWatch from './components/Stopwatch.svelte';
+	import Notification from './components/Notification.svelte';
 </script>
 
 <main>
 	<StopWatch />
+	<Notification />
 </main>
 
 <style>

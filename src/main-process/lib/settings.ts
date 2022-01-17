@@ -41,6 +41,12 @@ class Store {
 
         return true;
     }
+    setNotificationIntervalSec(second: number): boolean {
+        try { this.#store.set('notificationIntervalSec', second); }
+        catch(error) { return false; }
+
+        return true;
+    }
     getSettings(): Settings {
         const settings: Settings = this.#store.store;
         return settings;
