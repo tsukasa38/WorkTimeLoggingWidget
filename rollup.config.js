@@ -47,7 +47,12 @@ export default [
                 minify: production,
                 sourceMap: !production,
                 include: 'src/main-process/**/*',
-            })
+            }),
+            copy({
+                targets: [
+                    { src: 'icon.ico', dest: 'public' },
+                ]
+            }),
         ],
         external: ['electron', 'electron-store']
     },

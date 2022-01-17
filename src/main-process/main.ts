@@ -3,7 +3,7 @@ import Log from './lib/log';
 import Settings from './lib/settings';
 import Stopwatch from './lib/stopwatch';
 import { generateData } from './lib/notification';
-import { app, BrowserWindow, powerMonitor, dialog } from 'electron';
+import { app, BrowserWindow, powerMonitor, dialog, Tray, Menu } from 'electron';
 
 const development = (process.env.NODE_ENV === 'development' ? true : false);
 
@@ -25,6 +25,8 @@ const y = settings.position.y;
 const movable = settings.movable;
 const alwaysOnTop = settings.alwaysOnTop;
 const notification = settings.notificationIntervalSec;
+
+let tray = null;
 
 app.on('ready', () => {
     const mainWindow = new BrowserWindow({
@@ -51,6 +53,19 @@ app.on('ready', () => {
         if(second % notification === 0) { mainWindow.webContents.send('notification', generateData(second)); }
         mainWindow.webContents.send('time', second);
     });
+
+    const appClose = () => { app.quit(); };
+    const hideMainWindow = () => { mainWindow.minimize(); };
+    const showMainWindow = () => { mainWindow.restore(); mainWindow.focus(); };
+
+    tray = new Tray(path.join(__dirname, 'icon.ico'));
+    tray.addListener('double-click', showMainWindow);
+    tray.setToolTip('Work Time Logging Widget');
+    tray.setContextMenu(Menu.buildFromTemplate([
+        { label: 'ウィジェットの表示', click: showMainWindow },
+        { label: 'ウィジェットの非表示', click: hideMainWindow },
+        { label: '終了', click: appClose },
+    ]));
 
     powerMonitor.on('unlock-screen', () => {
         stopwatch.start();
