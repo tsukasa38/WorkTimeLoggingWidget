@@ -18,8 +18,8 @@ if(isMultipleLaunch) {
 const settings = Settings.getSettings();
 const x = settings.position.x;
 const y = settings.position.y;
-const movable = settings.movable;
-const alwaysOnTop = settings.alwaysOnTop;
+let movable: boolean = settings.movable;
+let alwaysOnTop: boolean = settings.alwaysOnTop;
 const notification = settings.notificationIntervalSec;
 
 let tray: Tray | null = null;
@@ -59,11 +59,16 @@ app.on('ready', () => {
     const appClose = () => { app.quit(); };
     const hideMainWindow = () => { mainWindow.minimize(); };
     const showMainWindow = () => { mainWindow.restore(); mainWindow.focus(); };
+    const changeMovable = () => { movable = !movable; mainWindow.setMovable(movable); Settings.setMovable(movable); }
+    const changeAlwaysOnTop = () => { alwaysOnTop = !alwaysOnTop; mainWindow.setAlwaysOnTop(alwaysOnTop); Settings.setIsAlwaysOnTop(alwaysOnTop); };
 
     tray = new Tray(path.join(__dirname, icon));
     tray.addListener('double-click', showMainWindow);
     tray.setToolTip('Work Time Logging Widget');
     tray.setContextMenu(Menu.buildFromTemplate([
+        { label: 'ウィジェットの固定', type: 'checkbox', checked: !movable, click: changeMovable },
+        { label: '最前面に固定', type: 'checkbox', checked: alwaysOnTop, click: changeAlwaysOnTop },
+        { type: 'separator' },
         { label: 'ウィジェットの表示', click: showMainWindow },
         { label: 'ウィジェットの非表示', click: hideMainWindow },
         { label: '終了', click: appClose },
