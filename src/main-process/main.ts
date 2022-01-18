@@ -37,8 +37,8 @@ app.on('ready', () => {
         y,
         movable,
         alwaysOnTop,
-        width: 300,
-        height: 200,
+        width: 280,
+        height: 180,
         show: false,
         frame: false,
         resizable: false,
@@ -52,7 +52,7 @@ app.on('ready', () => {
     if(development) { mainWindow.webContents.openDevTools(); }
 
     const stopwatch = new Stopwatch(async (second: number) => {
-        if(second % 60 === 0) { Log.insertLog('idle', Date.now()); }
+        //if(second % 60 === 0) { Log.insertLog('idle', Date.now()); }
         if(notification && second % notificationIntervalSec === 0) { mainWindow.webContents.send('notification', generateData(second)); }
         mainWindow.webContents.send('time', second);
     });
