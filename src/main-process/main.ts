@@ -20,7 +20,8 @@ const x = settings.position.x;
 const y = settings.position.y;
 let movable: boolean = settings.movable;
 let alwaysOnTop: boolean = settings.alwaysOnTop;
-const notification = settings.notificationIntervalSec;
+let notification: boolean = settings.notification;
+let notificationIntervalSec: number = settings.notificationIntervalSec;
 
 let tray: Tray | null = null;
 let icon: string = 'icon.png';
@@ -52,22 +53,34 @@ app.on('ready', () => {
 
     const stopwatch = new Stopwatch(async (second: number) => {
         if(second % 60 === 0) { Log.insertLog('idle', Date.now()); }
-        if(second % notification === 0) { mainWindow.webContents.send('notification', generateData(second)); }
+        if(notification && second % notificationIntervalSec === 0) { mainWindow.webContents.send('notification', generateData(second)); }
         mainWindow.webContents.send('time', second);
     });
 
     const appClose = () => { app.quit(); };
     const hideMainWindow = () => { mainWindow.minimize(); };
     const showMainWindow = () => { mainWindow.restore(); mainWindow.focus(); };
+    const changeNotification = () => { notification = !notification; Settings.setNotification(notification); }
     const changeMovable = () => { movable = !movable; mainWindow.setMovable(movable); Settings.setMovable(movable); }
+    const changeNotificationIntervalSec = (second: number) => { notificationIntervalSec = second; Settings.setNotificationIntervalSec(second); };
     const changeAlwaysOnTop = () => { alwaysOnTop = !alwaysOnTop; mainWindow.setAlwaysOnTop(alwaysOnTop); Settings.setIsAlwaysOnTop(alwaysOnTop); };
+
+    const notificationMenu = Menu.buildFromTemplate([
+        { label: '15分', type: 'radio', click: () => changeNotificationIntervalSec(15*60), checked: (notificationIntervalSec === 15*60) },
+        { label: '30分', type: 'radio', click: () => changeNotificationIntervalSec(30*60), checked: (notificationIntervalSec === 30*50) },
+        { label: '60分', type: 'radio', click: () => changeNotificationIntervalSec(60*60), checked: (notificationIntervalSec === 60*60) },
+        { label: '90分', type: 'radio', click: () => changeNotificationIntervalSec(90*60), checked: (notificationIntervalSec === 90*60) },
+        { label: '120分', type: 'radio', click: () => changeNotificationIntervalSec(120*60), checked: (notificationIntervalSec === 120*60) },
+    ]);
 
     tray = new Tray(path.join(__dirname, icon));
     tray.addListener('double-click', showMainWindow);
     tray.setToolTip('Work Time Logging Widget');
     tray.setContextMenu(Menu.buildFromTemplate([
-        { label: 'ウィジェットの固定', type: 'checkbox', checked: !movable, click: changeMovable },
-        { label: '最前面に固定', type: 'checkbox', checked: alwaysOnTop, click: changeAlwaysOnTop },
+        { label: '通知', type: 'checkbox', checked: notification, click: changeNotification },
+        { label: '通知間隔', type: 'submenu', submenu: notificationMenu },
+        { label: 'ウィジェットの位置固定', type: 'checkbox', checked: !movable, click: changeMovable },
+        { label: 'ウィジェットの最前面固定', type: 'checkbox', checked: alwaysOnTop, click: changeAlwaysOnTop },
         { type: 'separator' },
         { label: 'ウィジェットの表示', click: showMainWindow },
         { label: 'ウィジェットの非表示', click: hideMainWindow },
