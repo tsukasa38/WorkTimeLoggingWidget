@@ -2,6 +2,7 @@ import path from 'path';
 import Log from './lib/log';
 import Settings from './lib/settings';
 import Stopwatch from './lib/stopwatch';
+import openAboutWindow from 'about-window';
 import { generateData } from './lib/notification';
 import { app, BrowserWindow, powerMonitor, dialog, Tray, Menu } from 'electron';
 
@@ -73,6 +74,15 @@ app.on('ready', () => {
         { label: '120分', type: 'radio', click: () => changeNotificationIntervalSec(120*60), checked: (notificationIntervalSec === 120*60) },
     ]);
 
+    const aboutWindow = () => openAboutWindow({
+        icon_path: path.join(__dirname, 'icon.png'),
+        copyright: 'Copyright (c) 2022 tsukasa38',
+        product_name: 'Work Time Logging Widget',
+        package_json_dir: __dirname,
+        show_close_button: '閉じる',
+        use_version_info: true,
+    });
+
     tray = new Tray(path.join(__dirname, icon));
     tray.addListener('double-click', showMainWindow);
     tray.setToolTip('Work Time Logging Widget');
@@ -84,6 +94,9 @@ app.on('ready', () => {
         { type: 'separator' },
         { label: 'ウィジェットの表示', click: showMainWindow },
         { label: 'ウィジェットの非表示', click: hideMainWindow },
+        { type: 'separator' },
+        { label: 'このアプリケーションについて', click: aboutWindow },
+        { type: 'separator' },
         { label: '終了', click: appClose },
     ]));
 
