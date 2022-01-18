@@ -52,7 +52,7 @@ app.on('ready', () => {
     if(development) { mainWindow.webContents.openDevTools(); }
 
     const stopwatch = new Stopwatch(async (second: number) => {
-        if(second % 60 === 0) { Log.insertLog('idle', Date.now()); }
+        //if(second % 60 === 0) { Log.insertLog('idle', Date.now()); }
         if(notification && second % notificationIntervalSec === 0) { mainWindow.webContents.send('notification', generateData(second)); }
         mainWindow.webContents.send('time', second);
     });
