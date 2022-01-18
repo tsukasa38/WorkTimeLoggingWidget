@@ -41,6 +41,12 @@ class Store {
 
         return true;
     }
+    setNotification(bool: boolean): boolean {
+        try { this.#store.set('notification', bool); }
+        catch(error) { return false; }
+
+        return true;
+    }
     setNotificationIntervalSec(second: number): boolean {
         try { this.#store.set('notificationIntervalSec', second); }
         catch(error) { return false; }
