@@ -7,10 +7,6 @@ import { app, BrowserWindow, powerMonitor, dialog, Tray, Menu } from 'electron';
 
 const development = (process.env.NODE_ENV === 'development' ? true : false);
 
-if(process.platform === 'win32') {
-    app.setAppUserModelId('Work Time Logging Widget.exe');
-}
-
 const isMultipleLaunch = !app.requestSingleInstanceLock();
 if(isMultipleLaunch) {
     const title = 'Multiple Launch Error';
@@ -26,7 +22,13 @@ const movable = settings.movable;
 const alwaysOnTop = settings.alwaysOnTop;
 const notification = settings.notificationIntervalSec;
 
-let tray = null;
+let tray: Tray | null = null;
+let icon: string = 'icon.png';
+
+if(process.platform === 'win32') {
+    icon = 'icon.ico';
+    app.setAppUserModelId('Work Time Logging Widget.exe');
+}
 
 app.on('ready', () => {
     const mainWindow = new BrowserWindow({
@@ -58,7 +60,7 @@ app.on('ready', () => {
     const hideMainWindow = () => { mainWindow.minimize(); };
     const showMainWindow = () => { mainWindow.restore(); mainWindow.focus(); };
 
-    tray = new Tray(path.join(__dirname, 'icon.ico'));
+    tray = new Tray(path.join(__dirname, icon));
     tray.addListener('double-click', showMainWindow);
     tray.setToolTip('Work Time Logging Widget');
     tray.setContextMenu(Menu.buildFromTemplate([
