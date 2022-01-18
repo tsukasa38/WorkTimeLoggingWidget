@@ -17,35 +17,35 @@ export function generateData(timeSec: number): NotificationData {
     }
 
     if(hour === 0 && minute === 0) {
-        const body = `${second}秒経過しました。`;
+        const body = `作業開始から${second}秒経過しました。`;
         return { title, body, tag };
     }
 
     if(hour === 0 && second === 0) {
-        const body = `${minute}分経過しました。`;
+        const body = `作業開始から${minute}分経過しました。`;
         return { title, body, tag };
     }
 
     if(minute === 0 && second === 0) {
-        const body = `${hour}時間経過しました。`;
+        const body = `作業開始から${hour}時間経過しました。`;
         return { title, body, tag };
     }
 
     if(hour === 0) {
-        const body = `${minute}分${second}秒経過しました。`;
+        const body = `作業開始から${minute}分${second}秒経過しました。`;
         return { title, body, tag };
     }
 
     if(minute === 0) {
-        const body = `${hour}時間${second}秒経過しました。`;
+        const body = `作業開始から${hour}時間${second}秒経過しました。`;
         return { title, body, tag };
     }
 
     if(second === 0) {
-        const body = `${hour}時間${minute}分経過しました。`;
+        const body = `作業開始から${hour}時間${minute}分経過しました。`;
         return { title, body, tag };
     }
 
-    const body = `${hour}時間${minute}分${second}秒経過しました。`;
+    const body = `作業開始から${hour}時間${minute}分${second}秒経過しました。`;
     return { title, body, tag };
 }
