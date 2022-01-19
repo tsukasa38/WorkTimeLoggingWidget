@@ -1,6 +1,8 @@
 {
   "name": "work-time-logging-widget",
-  "version": "3.6.1",
+  "version": "3.6.2",
+  "author": "tsukasa38",
+  "description": "Support to take regular breaks during PC work",
   "main": "public/main.cjs",
   "private": true,
   "scripts": {
