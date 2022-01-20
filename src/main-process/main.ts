@@ -64,7 +64,7 @@ app.on('ready', () => {
     const changeNotification = () => { notification = !notification; Settings.setNotification(notification); }
     const changeMovable = () => { movable = !movable; mainWindow.setMovable(movable); Settings.setMovable(movable); }
     const changeNotificationIntervalSec = (second: number) => { notificationIntervalSec = second; Settings.setNotificationIntervalSec(second); };
-    const changeAlwaysOnTop = () => { alwaysOnTop = !alwaysOnTop; mainWindow.setAlwaysOnTop(alwaysOnTop); Settings.setIsAlwaysOnTop(alwaysOnTop); };
+    const changeAlwaysOnTop = () => { alwaysOnTop = !alwaysOnTop; mainWindow.setAlwaysOnTop(alwaysOnTop); Settings.setAlwaysOnTop(alwaysOnTop); };
 
     const notificationMenu = Menu.buildFromTemplate([
         { label: '15分', type: 'radio', click: () => changeNotificationIntervalSec(15*60), checked: (notificationIntervalSec === 15*60) },

@@ -1,61 +1,108 @@
-import ElectronStore from 'electron-store';
+import path from 'path';
+import { app } from 'electron';
+import { LowSync, JSONFileSync } from 'lowdb';
 import { name, fileExtension, defaults, type Settings } from './settings.config';
 
+const userDataPath: string = app.getPath('userData');
+const fileName: string = (fileExtension === '' ? name : `${name}.${fileExtension}`);
+const filePath: string = path.join(userDataPath, fileName);
+
 class Store {
-    #store: ElectronStore<Settings>;
+    #db: LowSync<Settings>;
 
     constructor() {
-        this.#store = new ElectronStore<Settings>({
-            name,
-            defaults,
-            fileExtension,
-        });
+        const adapter = new JSONFileSync<Settings>(filePath);
+        this.#db = new LowSync<Settings>(adapter);
     }
     setPosition(x: number, y: number): boolean {
-        try { this.#store.set('position', { x, y }); }
-        catch(error) { return false; }
+        try {
+            this.#db.read();
+            this.#db.data ??= defaults;
+            this.#db.data.position = { x, y };
+            this.#db.write();
+        } catch(error) {
+            return false;
+        }
 
         return true;
     }
     setMovable(bool: boolean): boolean {
-        try {this.#store.set('movable', bool); }
-        catch(error) { return false; }
+        try {
+            this.#db.read();
+            this.#db.data ??= defaults;
+            this.#db.data.movable = bool;
+            this.#db.write();
+        } catch(error) {
+            return false;
+        }
 
         return true;
     }
     setFontColor(color: string): boolean {
-        try { this.#store.set('fontColor', color); }
-        catch(error) { return false; }
+        try {
+            this.#db.read();
+            this.#db.data ??= defaults;
+            this.#db.data.fontColor = color;
+            this.#db.write();
+        } catch(error) {
+            return false;
+        }
 
         return true;
     }
-    setIsAlwaysOnTop(bool: boolean): boolean {
-        try { this.#store.set('isAlwaysOnTop', bool); }
-        catch(error) { return false; }
+    setAlwaysOnTop(bool: boolean): boolean {
+        try {
+            this.#db.read();
+            this.#db.data ??= defaults;
+            this.#db.data.alwaysOnTop = bool;
+            this.#db.write();
+        } catch(error) {
+            return false;
+        }
 
         return true;
     }
     setBackgroundColor(color: string): boolean {
-        try { this.#store.set('backgroundColor', color); }
-        catch(error) { return false; }
+        try {
+            this.#db.read();
+            this.#db.data ??= defaults;
+            this.#db.data.backgroundColor = color;
+            this.#db.write();
+        } catch(error) {
+            return false;
+        }
 
         return true;
     }
     setNotification(bool: boolean): boolean {
-        try { this.#store.set('notification', bool); }
-        catch(error) { return false; }
+        try {
+            this.#db.read();
+            this.#db.data ??= defaults;
+            this.#db.data.notification = bool;
+            this.#db.write();
+        } catch(error) {
+            return false;
+        }
 
         return true;
     }
     setNotificationIntervalSec(second: number): boolean {
-        try { this.#store.set('notificationIntervalSec', second); }
-        catch(error) { return false; }
+        try {
+            this.#db.read();
+            this.#db.data ??= defaults;
+            this.#db.data.notificationIntervalSec = second;
+            this.#db.write();
+        } catch(error) {
+            return false;
+        }
 
         return true;
     }
     getSettings(): Settings {
-        const settings: Settings = this.#store.store;
-        return settings;
+        try { this.#db.read(); }
+        catch(e) { return defaults; }
+
+        return this.#db.data ?? defaults;
     }
 }
 
