@@ -12,3 +12,6 @@ nsis:
   createDesktopShortcut: true
   allowToChangeInstallationDirectory: false
   artifactName: "${productName}_setup_${version}.${ext}"
+
+extraFiles:
+  - "THIRD-PARTY-SOFTWARE-LICENSES"

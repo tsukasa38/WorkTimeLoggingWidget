@@ -1,15 +1,16 @@
 {
   "name": "work-time-logging-widget",
-  "version": "3.6.3",
+  "version": "3.7.0",
   "author": "tsukasa38",
   "description": "Support to take regular breaks during PC work",
   "main": "public/main.cjs",
   "private": true,
   "scripts": {
     "preview": "electron .",
+    "licenses": "node license.cjs",
     "dev": "NODE_ENV=development rollup -c",
     "build": "NODE_ENV=production rollup -c",
-    "dist": "npm run build && electron-builder --win --x64 --config",
+    "dist": "npm run licenses && npm run build && electron-builder --win --x64 --config",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
@@ -19,6 +20,7 @@
     "electron": "^16.0.7",
     "electron-builder": "^22.14.5",
     "esbuild": "^0.14.11",
+    "license-checker": "^25.0.1",
     "rollup": "^2.64.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-css-only": "^3.1.0",
