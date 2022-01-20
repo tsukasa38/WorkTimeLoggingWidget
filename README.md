@@ -1,5 +1,7 @@
 # Work Time Logging Widget
 
+![Demonstration on Windows10](demo.png)
+
 This application supports you to take regular breaks during PC work.
 Have you ever been crazy about PC work for hours ?
 Long hours of pc work will be bad influence on your body (For example, eye strain, stiff neck, stiff back and so on).
@@ -42,3 +44,7 @@ This application notifies you at a fixed intervals (15 min, 30 min, 60 min, 90 m
   - An extremely fast JavaScript bundler
 - [TypeScript](https://www.typescriptlang.org/)
   - A strongly typed programming language based on JavaScript
+
+## License
+
+[MIT](https://github.com/tsukasa38/WorkTimeLoggingWidget/blob/main/LICENSE)

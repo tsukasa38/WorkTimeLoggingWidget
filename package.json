@@ -1,9 +1,10 @@
 {
   "name": "work-time-logging-widget",
-  "version": "3.7.3",
+  "version": "3.8.0",
   "author": "tsukasa38",
   "description": "Support to take regular breaks during PC work",
   "main": "public/main.cjs",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "preview": "electron .",
