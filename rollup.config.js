@@ -54,7 +54,7 @@ export default [
                 ]
             }),
         ],
-        external: ['electron', 'electron-store', 'about-window']
+        external: ['electron', 'about-window']
     },
     {
         input: 'src/context-bridge/main.ts',
